@@ -4,6 +4,10 @@ import { MoralisProvider } from 'react-moralis'
 import Header from "../components/Header"
 import Head from 'next/head'
 
+
+const MORALIS_SERVER_URL = process.env.NEXT_PUBLIC_MORALIS_SERVER_URL
+const APP_ID = process.env.NEXT_PUBLIC_MORALIS_APP_ID
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -13,7 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <MoralisProvider initializeOnMount={false}> 
+      <MoralisProvider serverUrl={MORALIS_SERVER_URL} appId={APP_ID}> 
         <Header />
         <Component {...pageProps} />
       </MoralisProvider>
