@@ -1,6 +1,7 @@
 import "../styles/globals.css"
 import type { AppProps } from "next/app"
 import { MoralisProvider } from "react-moralis"
+import { NotificationProvider } from "web3uikit"
 import Header from "../components/Header"
 import Head from "next/head"
 
@@ -21,8 +22,10 @@ function MyApp({ Component, pageProps }: AppProps) {
                 serverUrl={MORALIS_SERVER_URL!}
                 initializeOnMount={true}
             >
-                <Header />
-                <Component {...pageProps} />
+                <NotificationProvider>
+                    <Header />
+                    <Component {...pageProps} />
+                </NotificationProvider>
             </MoralisProvider>
         </>
     )

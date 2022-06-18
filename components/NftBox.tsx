@@ -1,14 +1,15 @@
 import type { NextPage } from "next"
-import { Card, Tooltip, Illustration } from "web3uikit"
+import { Card, Tooltip, Illustration, useNotification } from "web3uikit"
 import nftAbi from "../constants/BasicNft.json"
 import nftMarketplaceAbi from "../constants/NftMarketplace.json"
 
-import { useMoralis, useWeb3Contract } from "react-moralis"
+import { useMoralisWeb3Api, useMoralis, useWeb3Contract } from "react-moralis"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { ethers } from "ethers"
+import { UpdateListingModal } from "./UpdateListingModal"
 
-export interface NFTBoxProps {
+interface NFTBoxProps {
     price?: number
     nftAddress: string
     tokenId: string
@@ -41,11 +42,24 @@ const NFTBox: NextPage<NFTBoxProps> = ({
     const [tokenName, setTokenName] = useState<string | undefined>()
     const [tokenDescription, setTokenDescription] = useState<string | undefined>()
 
+    const dispatch = useNotification()
+
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
         contractAddress: nftAddress,
         functionName: "tokenURI",
         params: {
+            tokenId: tokenId,
+        },
+    })
+
+    const { runContractFunction: buyItem } = useWeb3Contract({
+        abi: nftMarketplaceAbi,
+        contractAddress: marketplaceAddress,
+        functionName: "buyItem",
+        msgValue: price,
+        params: {
+            nftAddress: nftAddress,
             tokenId: tokenId,
         },
     })
@@ -72,6 +86,25 @@ const NFTBox: NextPage<NFTBoxProps> = ({
     const isOwnedByUser = seller === account || seller === undefined
     const formattedSellerAddress = isOwnedByUser ? "you" : truncateStr(seller || "", 15)
 
+    const handleCardClick = () =>
+        isOwnedByUser
+            ? setShowModal(true)
+            : buyItem({
+                  onSuccess: () => handleBuyItemSuccess(),
+              })
+
+    const handleBuyItemSuccess = () => {
+        dispatch({
+            type: "success",
+            message: "Item bought successfully",
+            title: "Item Bought",
+            position: "topR",
+        })
+    }
+
+    // State to handle display of 'create listing' or 'update listing' modal
+    const [showModal, setShowModal] = useState(false)
+    const hideModal = () => setShowModal(false)
     const isListed = seller !== undefined
 
     const tooltipContent = isListed
@@ -82,7 +115,17 @@ const NFTBox: NextPage<NFTBoxProps> = ({
 
     return (
         <div className="p-2">
-            <Card title={tokenName} description={tokenDescription}>
+            <UpdateListingModal
+                isVisible={showModal && isListed}
+                imageURI={imageURI}
+                nftMarketplaceAbi={nftMarketplaceAbi}
+                nftAddress={nftAddress}
+                tokenId={tokenId}
+                onClose={hideModal}
+                marketplaceAddress={marketplaceAddress}
+                currentPrice={price}
+            />
+            <Card title={tokenName} description={tokenDescription} onClick={handleCardClick}>
                 <Tooltip content={tooltipContent} position="top">
                     <div className="p-2">
                         {imageURI ? (
