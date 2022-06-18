@@ -32,7 +32,7 @@ Moralis.Cloud.afterSave("ItemListed", async (request) => {
         const activeItem = new ActiveItem()
         activeItem.set("marketplaceAddress", request.object.get("address")) // adress key is always present in the object
         //retrieve attributes from ItemListedEvent
-        activeItem.set("seller", request.object.get("sender"))
+        activeItem.set("seller", request.object.get("seller"))
         activeItem.set("nftAddress", request.object.get("nftAddress"))
         activeItem.set("tokenId", request.object.get("tokenId"))
         activeItem.set("price", request.object.get("price"))
