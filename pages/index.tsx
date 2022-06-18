@@ -18,8 +18,13 @@ const Home: NextPage = () => {
             ) : (
                 listedNfts.map((nft /*, index*/) => {
                     console.log(nft.attributes)
-
-                    return <div>WIP</div>
+                    const nftAttributes: NFTBoxProps = nft.attributes
+                    return (
+                        <NFTBox
+                            {...nftAttributes}
+                            key={`${nftAttributes.nftAddress}${nftAttributes.tokenId}`}
+                        />
+                    )
                 })
             )}
         </div>
