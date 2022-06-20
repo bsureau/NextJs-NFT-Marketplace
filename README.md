@@ -2,7 +2,7 @@
 
 This is the frontend part of NFT Marketplace project, using The Graph indexer.
 
-> The Graph is an indexing protocol for querying networks like Ethereum and IPFS. Anyone can build and publish open APIs, called subgraphs, making data easily accessible.
+> The Graph is an indexing protocol for querying networks like Ethereum and IPFS. Anyone can build and publish open APIs, called subgraphs, making data easily accessible. It uses GraphQL and is a more decentralized solution compared to Moralis. 
 
 ### Run the project
 
