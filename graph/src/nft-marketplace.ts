@@ -8,7 +8,7 @@ import {
 import { ItemListed, ActiveItem, ItemBought, ItemCanceled } from "../generated/schema"
 
 export function handleItemBought(event: ItemBoughtEvent): void {
-    const id: string = getIdFromEventParams(event.params.tokenId, event.params.nftAddressv)
+    const id: string = getIdFromEventParams(event.params.tokenId, event.params.nftAddress)
 
     let itemBought: ItemBought | null = ItemBought.load(id)
     let activeItem: ActiveItem | null = ActiveItem.load(id)
@@ -39,10 +39,10 @@ export function handleItemCanceled(event: ItemCanceledEvent): void {
     itemCanceled.seller = event.params.sender
     itemCanceled.nftAddress = event.params.nftAddress
     itemCanceled.tokenId = event.params.tokenId
-    activeItem!.buyer = Address.fromString("0x000000000000000000dEaD")
+    activeItem!.buyer = Address.fromString("0x000000000000000000000000000000000000dEaD")
 
     itemCanceled.save()
-    activeItem.save()
+    activeItem!.save()
 }
 
 export function handleItemListed(event: ItemListedEvent): void {
