@@ -1,29 +1,30 @@
 specVersion: 0.0.4
 schema:
-  file: ./schema.graphql
+    file: ./schema.graphql
 dataSources:
-  - kind: ethereum
-    name: NftMarketplace
-    network: rinkeby
-    source:
-      address: "0x82DCd60A1264AE6fe153406c29E38856F09D3700"
-      abi: NftMarketplace
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - ItemBought
-        - ItemCanceled
-        - ItemListed
-      abis:
-        - name: NftMarketplace
-          file: ./abis/NftMarketplace.json
-      eventHandlers:
-        - event: ItemBought(indexed address,indexed address,indexed uint256,uint256)
-          handler: handleItemBought
-        - event: ItemCanceled(indexed address,indexed address,indexed uint256)
-          handler: handleItemCanceled
-        - event: ItemListed(indexed address,indexed address,indexed uint256,uint256)
-          handler: handleItemListed
-      file: ./src/nft-marketplace.ts
+    - kind: ethereum
+      name: NftMarketplace
+      network: rinkeby
+      source:
+          address: "0x82DCd60A1264AE6fe153406c29E38856F09D3700"
+          abi: NftMarketplace
+          startBlock: 10885538
+      mapping:
+          kind: ethereum/events
+          apiVersion: 0.0.5
+          language: wasm/assemblyscript
+          entities:
+              - ItemBought
+              - ItemCanceled
+              - ItemListed
+          abis:
+              - name: NftMarketplace
+                file: ./abis/NftMarketplace.json
+          eventHandlers:
+              - event: ItemBought(indexed address,indexed address,indexed uint256,uint256)
+                handler: handleItemBought
+              - event: ItemCanceled(indexed address,indexed address,indexed uint256)
+                handler: handleItemCanceled
+              - event: ItemListed(indexed address,indexed address,indexed uint256,uint256)
+                handler: handleItemListed
+          file: ./src/nft-marketplace.ts
