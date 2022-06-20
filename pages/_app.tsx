@@ -17,11 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <MoralisProvider
-                appId={APP_ID!}
-                serverUrl={MORALIS_SERVER_URL!}
-                initializeOnMount={true}
-            >
+            <MoralisProvider initializeOnMount={false}>
                 <NotificationProvider>
                     <Header />
                     <Component {...pageProps} />
