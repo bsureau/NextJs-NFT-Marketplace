@@ -2,35 +2,36 @@ import type { NextPage } from "next"
 import { useMoralis, useMoralisQuery } from "react-moralis"
 import { useEffect, useState } from "react"
 import NFTBox from "../components/NftBox"
-
-const PAGE_SIZE = 9
+import { useQuery } from "@apollo/client"
+import { GET_ACTIVE_ITEMS } from "../constants/subgraphQueries"
+import { privateEncrypt } from "crypto"
 
 const Home: NextPage = () => {
     // TODO: Implement paging in UI
-    const [page, setPage] = useState(1)
     const { isWeb3Enabled } = useMoralis()
 
-    const { data: listedNfts, isFetching: fetchingListedNfts } = useMoralisQuery(
-        "ActiveItem",
-        (query) =>
-            query
-                .limit(PAGE_SIZE)
-                .descending("tokenId")
-                .skip((page - 1) * PAGE_SIZE)
-    )
+    const marketplaceAddress = process.env.NFT_CONTRACT_ADDRESS || ""
+
+    const { loading, error, data: listedNfts } = useQuery(GET_ACTIVE_ITEMS)
+
+    interface NFTAttributes {
+        price?: number
+        nftAddress: string
+        tokenId: string
+        seller?: string
+    }
 
     return (
         <div className="container mx-auto">
             <h1 className="py-4 px-4 font-bold text-2xl">Recently Listed</h1>
             <div className="flex flex-wrap">
                 {isWeb3Enabled ? (
-                    fetchingListedNfts ? (
+                    loading || !listedNfts ? (
                         <div>Loading...</div>
                     ) : (
-                        listedNfts.map((nft /*, index*/) => {
-                            console.log(nft.attributes)
-                            const { price, nftAddress, tokenId, marketplaceAddress, seller } =
-                                nft.attributes
+                        listedNfts.activeItems.map((nft: NFTAttributes /*, index*/) => {
+                            console.log(nft)
+                            const { price, nftAddress, tokenId, seller } = nft
 
                             return (
                                 <NFTBox

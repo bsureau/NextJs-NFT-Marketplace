@@ -1,8 +1,10 @@
-# NFT Marketplace 
+# NFT Marketplace
 
-This is the frontend part of NFT Marketplace project, using Moralis indexer.
+This is the frontend part of NFT Marketplace project, using TheGraph indexer.
 
 ### Run the project
+
+/!\ You'll first need to reate a subgraph on [Thegraph.com](https://thegraph.com) then follow the given documentation instructions
 
 ```bash
 yarn install # Install dependencies

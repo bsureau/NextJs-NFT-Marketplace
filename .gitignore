@@ -94,3 +94,4 @@ front-end-typescript/graph-nft-marketplace/node_modules
 
 # The graph
 graph/node_modules
+graph/build

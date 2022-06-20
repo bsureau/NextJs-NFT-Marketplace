@@ -4,9 +4,14 @@ import { MoralisProvider } from "react-moralis"
 import { NotificationProvider } from "web3uikit"
 import Header from "../components/Header"
 import Head from "next/head"
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client"
 
-const MORALIS_SERVER_URL = process.env.NEXT_PUBLIC_MORALIS_SERVER_URL
-const APP_ID = process.env.NEXT_PUBLIC_MORALIS_APP_ID
+const graphUrl = process.env.THE_GRAPH_URL || ""
+
+const client = new ApolloClient({
+    cache: new InMemoryCache(),
+    uri: graphUrl,
+})
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
@@ -18,10 +23,12 @@ function MyApp({ Component, pageProps }: AppProps) {
             </Head>
 
             <MoralisProvider initializeOnMount={false}>
-                <NotificationProvider>
-                    <Header />
-                    <Component {...pageProps} />
-                </NotificationProvider>
+                <ApolloProvider client={client}>
+                    <NotificationProvider>
+                        <Header />
+                        <Component {...pageProps} />
+                    </NotificationProvider>
+                </ApolloProvider>
             </MoralisProvider>
         </>
     )
